@@ -21,8 +21,7 @@
   color: #09d3ac;
 }
 
-.BottomNavigation {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.MuiPaper-root {
+    padding: 5px;
+    min-width: 30px;
 }
