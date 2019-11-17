@@ -1,0 +1,1 @@
+export {AutomatitionExercise} from './automatition';
