@@ -14,7 +14,19 @@ const AbsoluteButtomNavigation = styled(BottomNavigation)({
   width: '100%',
 });
 
-function ScreenById(screenId, exerciseChooseHandler) {
+const sampleExerciseDesciption = {
+  "type": "automatition",
+  "duration": "1",
+  "params": [
+    {"content": ["Ра", "ра", "ра"], "duration": 2},
+    {"content": ["ра", "Ра", "ра"], "duration": 2},
+    {"content": ["Ро", "ро", "ро"], "duration": 2},
+    {"content": ["Ру", "ру", "ру"], "duration": 2},
+    {"content": ["Оранжевенький", "бронетранспортёрчик", "на", "красном", "морском", "зареве"], "duration": 3},
+  ]
+};
+
+function RenderScreen(screenId, exerciseChooseHandler, lastScreenHandler) {
     switch (screenId) {
       case "lesson":
         return <Lesson handler={exerciseChooseHandler} />;
@@ -23,7 +35,9 @@ function ScreenById(screenId, exerciseChooseHandler) {
       case "about":
         return <About/>;
       case "exercise":
-        return <AutomatitionExercise/>;
+        return <AutomatitionExercise
+          params={sampleExerciseDesciption.params} 
+          lastScreenCallback={lastScreenHandler}/>;
       default:
         return <Lesson handler={exerciseChooseHandler} />;
     }
@@ -65,7 +79,8 @@ function App() {
     prevScreenRef.current = screen;
   });
   const prevScreen = prevScreenRef.current;
-  const screenElement = ScreenById(screen, ()=>{ setScreen('exercise'); });
+  const screenElement = RenderScreen(screen, ()=>{ setScreen('exercise'); },
+                                     ()=>{ setScreen('prevScreen'); });
   return (
     <div className="App">
         {RenderBackButton(screen, prevScreen, setScreen)}
