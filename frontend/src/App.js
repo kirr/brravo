@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, BottomNavigation, BottomNavigationAction, IconButton} from '@material-ui/core';
 import {MenuBook, Assignment, Info, ArrowBack} from '@material-ui/icons';
 import {Lesson, Exercises, About} from './navigation_screens';
-import {AutomatitionExercise} from './exercises';
+import {AutomatitionExercise, StoryExercise} from './exercises';
 
 import './App.css';
 
@@ -31,11 +31,11 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
           return <AutomatitionExercise
             params={exerciseParams} 
             lastScreenCallback={lastScreenHandler}/>;
-        }/* else if (exerciseType === 'story') {
+        } else if (exerciseType === 'story') {
           return <StoryExercise
             params={exerciseParams} 
             lastScreenCallback={lastScreenHandler}/>;
-        }*/
+        }
         return <Box>404 Missing exercise :(</Box>;
       default:
         return <Lesson handler={exerciseChooseHandler} data={lessonsData[0]}/>;

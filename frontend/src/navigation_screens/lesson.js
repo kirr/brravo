@@ -5,9 +5,9 @@ export function Lesson(props) {
   return (
     <List component="nav" aria-label="Lesson">
     {
-      props.data.exercises.map((item)=>{
+      props.data.exercises.map((item, index)=>{
         return (
-          <ListItem button onClick={()=>{ props.handler(item.type, item.params); }}>
+          <ListItem key={index} button onClick={()=>{ props.handler(item.type, item.params); }}>
             <ListItemText primary={item.name} secondary={item.duration + " мин"} />
           </ListItem>
         );})
