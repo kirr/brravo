@@ -1,5 +1,5 @@
 import React from 'react';
-import {BottomNavigation, BottomNavigationAction, IconButton} from '@material-ui/core';
+import {Box, BottomNavigation, BottomNavigationAction, IconButton} from '@material-ui/core';
 import {MenuBook, Assignment, Info, ArrowBack} from '@material-ui/icons';
 import {Lesson, Exercises, About} from './navigation_screens';
 import {AutomatitionExercise} from './exercises';
@@ -8,38 +8,37 @@ import './App.css';
 
 import { styled } from '@material-ui/core/styles';
 
+import * as lessonsData from './lessons.json';
+
 const AbsoluteButtomNavigation = styled(BottomNavigation)({
   position: 'absolute',
   bottom: 0,
   width: '100%',
 });
 
-const sampleExerciseDesciption = {
-  "type": "automatition",
-  "duration": "1",
-  "params": [
-    {"content": ["Ра", "ра", "ра"], "duration": 2},
-    {"content": ["ра", "Ра", "ра"], "duration": 2},
-    {"content": ["Ро", "ро", "ро"], "duration": 2},
-    {"content": ["Ру", "ру", "ру"], "duration": 2},
-    {"content": ["Оранжевенький", "бронетранспортёрчик", "на", "красном", "морском", "зареве"], "duration": 3},
-  ]
-};
-
-function RenderScreen(screenId, exerciseChooseHandler, lastScreenHandler) {
+function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenHandler) {
+    console.log('Render screen', screenId);
     switch (screenId) {
       case "lesson":
-        return <Lesson handler={exerciseChooseHandler} />;
+        return <Lesson handler={exerciseChooseHandler} data={lessonsData[0]}/>;
       case "exercises":
         return <Exercises/>
       case "about":
         return <About/>;
       case "exercise":
-        return <AutomatitionExercise
-          params={sampleExerciseDesciption.params} 
-          lastScreenCallback={lastScreenHandler}/>;
+        const [exerciseType, exerciseParams] = exerciseData;
+        if (exerciseType === 'automatition') {
+          return <AutomatitionExercise
+            params={exerciseParams} 
+            lastScreenCallback={lastScreenHandler}/>;
+        }/* else if (exerciseType === 'story') {
+          return <StoryExercise
+            params={exerciseParams} 
+            lastScreenCallback={lastScreenHandler}/>;
+        }*/
+        return <Box>404 Missing exercise :(</Box>;
       default:
-        return <Lesson handler={exerciseChooseHandler} />;
+        return <Lesson handler={exerciseChooseHandler} data={lessonsData[0]}/>;
     }
 }
 
@@ -74,12 +73,18 @@ function RenderBackButton(screen, prevScreen, setScreenCallback) {
 
 function App() {
   const [screen, setScreen] = React.useState('lesson');
+  const [currentExercise, setCurrentExercise] = React.useState(null);
   const prevScreenRef = React.useRef();
   React.useEffect(() => {
     prevScreenRef.current = screen;
   });
   const prevScreen = prevScreenRef.current;
-  const screenElement = RenderScreen(screen, ()=>{ setScreen('exercise'); },
+  const screenElement = RenderScreen(screen,
+                                     currentExercise,
+                                     (exerciseType, exerciseParams)=>{
+                                       setCurrentExercise([exerciseType, exerciseParams]);
+                                       setScreen('exercise');
+                                     },
                                      ()=>{ setScreen('prevScreen'); });
   return (
     <div className="App">
