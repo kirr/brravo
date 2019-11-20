@@ -8,7 +8,7 @@ import './App.css';
 
 import { styled } from '@material-ui/core/styles';
 
-import * as lessonsData from './lessons.json';
+import {lessons} from './lessons.json';
 
 const AbsoluteButtomNavigation = styled(BottomNavigation)({
   position: 'absolute',
@@ -17,10 +17,9 @@ const AbsoluteButtomNavigation = styled(BottomNavigation)({
 });
 
 function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenHandler) {
-    console.log('Render screen', screenId);
     switch (screenId) {
       case "lesson":
-        return <Lesson handler={exerciseChooseHandler} data={lessonsData[0]}/>;
+        return <Lesson handler={exerciseChooseHandler} lessons={lessons} />;
       case "exercises":
         return <Exercises/>
       case "about":
@@ -38,7 +37,7 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
         }
         return <Box>404 Missing exercise :(</Box>;
       default:
-        return <Lesson handler={exerciseChooseHandler} data={lessonsData[0]}/>;
+        return <Lesson handler={exerciseChooseHandler} lessons={lessons} />;
     }
 }
 
@@ -85,7 +84,7 @@ function App() {
                                        setCurrentExercise([exerciseType, exerciseParams]);
                                        setScreen('exercise');
                                      },
-                                     ()=>{ setScreen('prevScreen'); });
+                                     ()=>{ setScreen(prevScreen); });
   return (
     <div className="App">
         {RenderBackButton(screen, prevScreen, setScreen)}
