@@ -1,0 +1,8 @@
+.cache
+.DS_Store
+.Python
+
+*.obj
+*.pyc
+*.swp
+*.yate.obj
