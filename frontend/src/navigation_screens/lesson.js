@@ -1,6 +1,8 @@
 import React from 'react';
 import {List, ListItem, ListItemText, Tabs, Tab} from '@material-ui/core';
 
+import {config} from '../config.js'
+
 const useStateWithLocalStorage = localStorageKey => {
   const [value, setValue] = React.useState(
     localStorage.getItem(localStorageKey)
@@ -24,18 +26,32 @@ function LessonsNavBar(props) {
 }
 
 export function Lesson(props) {
+  const [lessons, setLessons] = React.useState([]);
+  React.useEffect(() => {
+    fetch(config.API_URL + '/lessons')
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error(response.statusText);
+        }
+      }).then(data => {
+          setLessons(data);
+      }).catch(error => console.log(error))
+  }, []);
+
   let [lessonId, setLessonId] = useStateWithLocalStorage('currentLessonId');
-  if (!lessonId && props.lessons) {
-    lessonId = props.lessons[0].id;
+  if (!lessonId && lessons) {
+    lessonId = lessons[0].id;
   }
-  const lessonData = props.lessons.find((item) => { return item.id === lessonId; });
+  const lessonData = lessons.find((item) => { return item.id === lessonId; });
   if (!lessonData) {
     return null;
   }
 
   return (
     <div>
-      <LessonsNavBar lessons={props.lessons}
+      <LessonsNavBar lessons={lessons}
                      lessonId={lessonId}
                      setLessonHandler={(lessonId)=>{ setLessonId(lessonId); }} />
       <List component="nav" aria-label="Lesson">

@@ -8,8 +8,6 @@ import './App.css';
 
 import { styled } from '@material-ui/core/styles';
 
-import {lessons} from './lessons.json';
-
 const AbsoluteButtomNavigation = styled(BottomNavigation)({
   position: 'absolute',
   bottom: 0,
@@ -19,7 +17,7 @@ const AbsoluteButtomNavigation = styled(BottomNavigation)({
 function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenHandler) {
     switch (screenId) {
       case "lesson":
-        return <Lesson handler={exerciseChooseHandler} lessons={lessons} />;
+        return <Lesson handler={exerciseChooseHandler} />;
       case "exercises":
         return <Exercises/>
       case "about":
@@ -37,7 +35,7 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
         }
         return <Box>404 Missing exercise :(</Box>;
       default:
-        return <Lesson handler={exerciseChooseHandler} lessons={lessons} />;
+        return <Lesson handler={exerciseChooseHandler} />;
     }
 }
 

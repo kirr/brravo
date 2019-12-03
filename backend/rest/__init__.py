@@ -1,4 +1,5 @@
 import os.path
+import json
 
 import flask
 import flask_json
@@ -38,4 +39,7 @@ def upload_static():
 @endpoint.route('/lessons', methods=['GET'])
 @flask_json.as_json
 def lessons():
-    return [{'name': 'lesson 1', 'id': 'l1'}]
+    lessons_path = os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'src', 'lessons.json')
+    with open(lessons_path) as f:
+        lessons = json.load(f)
+    return lessons["lessons"]

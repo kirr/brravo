@@ -3,6 +3,7 @@ from logging.handlers import RotatingFileHandler, SysLogHandler
 
 import flask
 import flask_json
+from flask_cors import CORS
 
 import config
 import rest
@@ -42,5 +43,6 @@ def create_app(flask_init_kwargs_overrides={}):
         app.logger.addHandler(logging_handler)
 
     app.register_blueprint(rest.endpoint, url_prefix='/rest')
+    CORS(app)
 
     return app;
