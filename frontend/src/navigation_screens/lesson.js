@@ -45,9 +45,12 @@ export function Lesson(props) {
     lessonId = lessons[0].id;
   }
   const lessonData = lessons.find((item) => { return item.id === lessonId; });
-  if (!lessonData) {
-    return null;
-  }
+  const exercises = lessonData ? lessonData.exercises.map((item, index)=> {
+        return (
+          <ListItem key={index} button onClick={()=>{ props.handler(item.type, item.params); }}>
+            <ListItemText primary={item.name} secondary={item.duration + " мин"} />
+          </ListItem>
+        );}) : null;
 
   return (
     <div>
@@ -55,14 +58,7 @@ export function Lesson(props) {
                      lessonId={lessonId}
                      setLessonHandler={(lessonId)=>{ setLessonId(lessonId); }} />
       <List component="nav" aria-label="Lesson">
-      {
-        lessonData.exercises.map((item, index)=>{
-          return (
-            <ListItem key={index} button onClick={()=>{ props.handler(item.type, item.params); }}>
-              <ListItemText primary={item.name} secondary={item.duration + " мин"} />
-            </ListItem>
-          );})
-      }
+      {exercises}
       </List>
     </div>
   );

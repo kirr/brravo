@@ -40,6 +40,6 @@ def upload_static():
 @flask_json.as_json
 def lessons():
     lessons_path = os.path.join(os.path.dirname(__file__), '..', 'lessons.json')
-    with open(lessons_path) as f:
+    with open(lessons_path, encoding='utf-8') as f:
         lessons = json.load(f)
     return lessons["lessons"]
