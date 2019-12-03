@@ -39,7 +39,7 @@ def upload_static():
 @endpoint.route('/lessons', methods=['GET'])
 @flask_json.as_json
 def lessons():
-    lessons_path = os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'src', 'lessons.json')
+    lessons_path = os.path.join(os.path.dirname(__file__), '..', 'lessons.json')
     with open(lessons_path) as f:
         lessons = json.load(f)
     return lessons["lessons"]
