@@ -3,6 +3,7 @@ from logging.handlers import RotatingFileHandler, SysLogHandler
 import datetime as dt
 
 import flask
+from flask_basicauth import BasicAuth
 import flask_json
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -45,11 +46,14 @@ def create_app(flask_init_kwargs_overrides={}):
     global db
     db = SQLAlchemy(app)
 
+    global auth
+    auth = BasicAuth(app)
+
     import rest
     app.register_blueprint(rest.endpoint, url_prefix='/rest')
     CORS(app)
 
     import admin
-    admin.init_flask_admin(app, db)
+    admin.init_flask_admin(app, db, auth)
 
     return app

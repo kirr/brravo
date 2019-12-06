@@ -17,4 +17,7 @@ FLASK = {
     'SQLALCHEMY_DATABASE_URI': (os.getenv('BRRAVO_DB_CONNECTION') or
                                 'sqlite:////data/brravo.db'),
     'SQLALCHEMY_TRACK_MODIFICATIONS': False,
+
+    'BASIC_AUTH_USERNAME': os.getenv('FLASK_ADMIN_LOGIN') or 'speech',
+    'BASIC_AUTH_PASSWORD': os.getenv('FLASK_ADMIN_PASSWORD') or '125521',
 }

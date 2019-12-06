@@ -41,4 +41,4 @@ def upload_static():
 @flask_json.as_json
 def lessons():
     lessons = Lesson.query.all()
-    return [l.serialize() for l in lessons]
+    return sorted([l.serialize() for l in lessons], key=lambda x: x['id'])
