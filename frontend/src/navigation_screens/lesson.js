@@ -41,13 +41,13 @@ export function Lesson(props) {
   }, []);
 
   let [lessonId, setLessonId] = useStateWithLocalStorage('currentLessonId');
-  if (!lessonId && lessons) {
+  if (!lessonId && lessons.length) {
     lessonId = lessons[0].id;
   }
   const lessonData = lessons.find((item) => { return item.id === lessonId; });
   const exercises = lessonData ? lessonData.exercises.map((item, index)=> {
         return (
-          <ListItem key={index} button onClick={()=>{ props.handler(item.type, item.params); }}>
+          <ListItem key={index} button onClick={()=>{ props.handler(item.type, item.content); }}>
             <ListItemText primary={item.name} secondary={item.duration + " мин"} />
           </ListItem>
         );}) : null;

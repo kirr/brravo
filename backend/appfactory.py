@@ -1,24 +1,24 @@
 import logging
 from logging.handlers import RotatingFileHandler, SysLogHandler
+import datetime as dt
 
 import flask
 import flask_json
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
 
 import config
-import rest
 
 
 FILE_LOG_FORMAT = ('%(name)s [%(asctime)s] {%(pathname)s:%(lineno)d} '
                    '%(levelname)s: %(message)s')
 SYS_LOG_FORMAT = ('flask.app: %(levelname)s: %(message)s')
 
+db = None
 
 def flaskjson_serializer(obj):
     if isinstance(obj, dt.datetime):
         return dt2ts(obj)
-    if isinstance(obj, bson.objectid.ObjectId):
-        return str(obj)
 
 
 def create_app(flask_init_kwargs_overrides={}):
@@ -42,7 +42,14 @@ def create_app(flask_init_kwargs_overrides={}):
         logging_handler.setLevel(flask_config['LOG_LEVEL'])
         app.logger.addHandler(logging_handler)
 
+    global db
+    db = SQLAlchemy(app)
+
+    import rest
     app.register_blueprint(rest.endpoint, url_prefix='/rest')
     CORS(app)
 
-    return app;
+    import admin
+    admin.init_flask_admin(app, db)
+
+    return app

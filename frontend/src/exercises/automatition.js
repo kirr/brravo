@@ -35,7 +35,7 @@ function ScreenProgress(props) {
 export function AutomatitionExercise(props) {
   const [screen, setScreen] = React.useState(0);
 
-  const desc = props.params[screen];
+  const desc = props.params.screens[screen];
   const classes = gridStyles();
 
   React.useEffect(() => {

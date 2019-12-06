@@ -5,6 +5,7 @@ import flask
 import flask_json
 from werkzeug.utils import secure_filename
 
+from models.lessons import Lesson
 import config
 
 
@@ -39,7 +40,5 @@ def upload_static():
 @endpoint.route('/lessons', methods=['GET'])
 @flask_json.as_json
 def lessons():
-    lessons_path = os.path.join(os.path.dirname(__file__), '..', 'lessons.json')
-    with open(lessons_path, encoding='utf-8') as f:
-        lessons = json.load(f)
-    return lessons["lessons"]
+    lessons = Lesson.query.all()
+    return [l.serialize() for l in lessons]
