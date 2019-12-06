@@ -10,7 +10,7 @@ FLASK = {
     'LOG_BACKUP_COUNT': 5,
     'LOG_LEVEL': 'DEBUG',
 
-    'UPLOAD_FOLDER': os.getenv('UPLOAD_FOLDER', '/uploads'),
+    'UPLOAD_FOLDER': os.getenv('UPLOAD_FOLDER', '/data/static'),
 
     'FLASK_ADMIN_SWATCH': 'cerulean',
 
