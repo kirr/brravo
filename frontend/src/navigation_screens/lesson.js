@@ -21,7 +21,7 @@ function LessonsNavBar(props) {
       variant="scrollable"
       scrollButtons="off"
     >
-      {props.lessons.map((item)=>{ return <Tab value={item.id} label={item.name} /> })}
+      {props.lessons.map((item)=>{ return <Tab key={item.id} value={item.id} label={item.name} /> })}
     </Tabs> );
 }
 

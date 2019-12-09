@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Paper, LinearProgress } from '@material-ui/core';
+import { Fade, Grid, Paper, LinearProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {FinishPopup} from './helpers.js';
@@ -25,8 +25,10 @@ function ScreenProgress(props) {
   const classes = progressStyles({duration: progress === 0 ? 0 : props.duration});
   React.useEffect(() => {
     setProgress(0);
-    const timer = setInterval(()=>{ setProgress(prev => {Math.min(prev + step, 100);});}, 100);
-    return () => { clearInterval(timer);};
+    const timer = setInterval(()=>{ setProgress(prev => {
+      Math.min(prev + step, 100);
+    });}, 100);
+    return () => { clearInterval(timer); };
   }, [props, step]);
 
   return (
@@ -36,32 +38,49 @@ function ScreenProgress(props) {
 
 export function AutomatitionExercise(props) {
   const [screen, setScreen] = React.useState(0);
+  const [fade, setFade] = React.useState(true);
+  const [state, setState] = React.useState('in');
 
   const desc = props.params.screens[Math.min(screen, props.params.screens.length - 1)];
   const finished = screen >= props.params.screens.length;
   const classes = gridStyles();
 
   React.useEffect(() => {
-    if (!finished) {
-      setTimeout(()=>{ setScreen(screen+1); }, desc.duration * 1000);
+    let timer = null;
+    if (state === 'in') {
+      timer = setTimeout(()=>{ setFade(false); setState('out')}, desc.duration * 1000);
+    } else if (state === 'out') {
+      if (!finished) {
+        timer = setTimeout(()=>{
+          setFade(true);
+          setScreen(screen + 1);
+          setState('in');
+        }, 200);
+      }
     }
-    return () => {};
-  }, [screen, desc]);
+
+    return () => { clearTimeout(timer); };
+  }, [state]);
 
   let finishPopup = null;
+  let screenProgress = null;
   if (finished) {
     finishPopup = <FinishPopup finishCallback={props.lastScreenCallback}/>;
+  } else {
+    screenProgress = <ScreenProgress duration={desc.duration} screen={screen}/>;
   }
 
   return (<div>
-    <ScreenProgress duration={desc.duration} screen={screen}/>
-    <Grid container classes={{root: classes.root}} justify="center" spacing={2}>
+    {screenProgress}
+    <Fade in={fade}>
+      <Grid container classes={{root: classes.root}} justify="center" spacing={2}>
           {desc.content.map((value, index) => (
             <Grid key={index + value} item>
               <Paper elevation={5}>{value}</Paper>
             </Grid>
           ))}
-    </Grid>
+      </Grid>
+    </Fade>
     {finishPopup}
   </div>);
 }

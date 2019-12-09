@@ -47,7 +47,6 @@ function RenderBottomNavbar(screen, setScreenCallback) {
                       setScreenCallback(newValue);
               }}
               showLabels
-              classes={{label: BottomNavigation}}
             >
               <BottomNavigationAction value="lesson" icon={<MenuBook />} />
               <BottomNavigationAction value="exercises"  icon={<Assignment />} />

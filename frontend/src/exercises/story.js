@@ -49,7 +49,7 @@ export function StoryExercise(props) {
   return (<Swiper {...params}>
               {props.params.screens.map((item, index)=>{
                 return (
-                  <div>
+                  <div key={index + '_container'}>
                     <div key={index} dangerouslySetInnerHTML={{__html: item}} />
                     {finishButton}
                   </div>);
