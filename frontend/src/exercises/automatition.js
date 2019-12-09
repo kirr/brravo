@@ -2,6 +2,8 @@ import React from 'react';
 import { Grid, Paper, LinearProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import {FinishPopup} from './helpers.js';
+
 const gridStyles = makeStyles({
   root: {
     position: "absolute",
@@ -35,19 +37,20 @@ function ScreenProgress(props) {
 export function AutomatitionExercise(props) {
   const [screen, setScreen] = React.useState(0);
 
-  const desc = props.params.screens[screen];
+  const desc = props.params.screens[Math.min(screen, props.params.screens.length - 1)];
+  const finished = screen >= props.params.screens.length;
   const classes = gridStyles();
 
   React.useEffect(() => {
-    if (desc) {
+    if (!finished) {
       setTimeout(()=>{ setScreen(screen+1); }, desc.duration * 1000);
     }
     return () => {};
   }, [screen, desc]);
 
-  if (props.params.length === screen) {
-    props.lastScreenCallback();
-    return null;
+  let finishPopup = null;
+  if (finished) {
+    finishPopup = <FinishPopup finishCallback={props.lastScreenCallback}/>;
   }
 
   return (<div>
@@ -59,5 +62,6 @@ export function AutomatitionExercise(props) {
             </Grid>
           ))}
     </Grid>
+    {finishPopup}
   </div>);
 }
