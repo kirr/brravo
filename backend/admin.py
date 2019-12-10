@@ -1,9 +1,12 @@
+import json
+
 from flask import Response
 from flask_admin import Admin
 from flask_admin.contrib.fileadmin import FileAdmin
 from flask_admin.contrib.sqla import ModelView
 from flask_basicauth import BasicAuth
 from werkzeug.exceptions import HTTPException
+import wtforms
 
 from models import lessons
 import config
@@ -45,9 +48,34 @@ class LessonsView(BasicAuthView, ModelView):
     ),)
 
 
+def content_formatter(exercise_type, content):
+    if exercise_type == 'Story':
+        json_data = json.loads(content)
+        screens = json_data['screens']
+        return '\n<screen_brake/>\n'.join(screens)
+    return content
+
+
 class ExercisesView(BasicAuthView, ModelView):
     column_list = ('id', 'type', 'display_name', 'duration', 'content')
     form_columns = ('id', 'type', 'display_name', 'duration', 'content')
+    form_widget_args = {'content': {'rows': 20}}
+    column_formatters = {
+        'content': lambda v, c, m, p: content_formatter(m.type.name, m.content)
+    }
+
+    def on_form_prefill(self, form, id):
+        if not form.content.data:
+            return
+        form.content.data = content_formatter(form.type.data, form.content.data)
+
+    def on_model_change(self, form, exercise, is_created):
+        if form.content.data and form.type.data == 'Story':
+            html_str = form.content.data
+            screens = html_str.split('<screen_brake/>')
+            screens = [s.strip() for s in screens]
+
+            exercise.content = json.dumps({'screens': screens})
 
 
 class FileAdminAuthView(BasicAuthView, FileAdmin):
