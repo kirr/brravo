@@ -11,6 +11,14 @@ const helpersStyles = makeStyles({
     marginLeft: "0",
     verticalAlign: "middle"
   },
+  timer: {
+    marginTop: "auto",
+    marginBottom: "auto",
+    marginRight: "20px",
+    marginLeft: "auto",
+    right: "0",
+    verticalAlign: "middle"
+  },
   progress: {
     transitionDuration: props => props.duration + "s"
   }
@@ -34,18 +42,38 @@ export function FinishPopup(props) {
     </Dialog>);
 }
 
-export function Toolbar(name, prevScreenHandler) {
+function CountDownTimer(props) {
+  const [coundown, setCountdown] = React.useState(props.durationSec);
+  React.useEffect(() => {
+    const timer = setInterval(()=> {
+        setCountdown((prev) => { setCountdown(Math.max(prev - 1, 0)); });
+      }, 1000);
+    return ()=>{clearInterval(timer);}
+  }, [props]);
+  const min = Math.floor(coundown / 60);
+  const sec = ("0" + coundown % 60).slice(-2);
+  return <Typography color="textSecondary"> {min}:{sec} </Typography>;
+}
+
+export function Toolbar(name, prevScreenHandler, duration) {
   const classes = helpersStyles();
+  let timer = null;
+  if (duration) {
+    timer = <CountDownTimer durationSec={duration*60}/>
+  }
   return (<Grid container spacing={0}>
-    <Grid item key="toolbar">
-            <IconButton onClick={()=>{prevScreenHandler();}}>
-              <ArrowBack />
-            </IconButton>
-    </Grid>
-    <Grid item key="title" classes={{root: classes.toolbar}} >
-      <Typography  color="textSecondary">{name}</Typography>
-    </Grid>
-    </Grid>);
+            <Grid item key="toolbar">
+                    <IconButton onClick={()=>{prevScreenHandler();}}>
+                      <ArrowBack />
+                    </IconButton>
+            </Grid>
+            <Grid item key="title" classes={{root: classes.toolbar}} >
+              <Typography  color="textSecondary">{name}</Typography>
+            </Grid>
+            <Grid item key="timer" classes={{root: classes.timer}} >
+              {timer}
+            </Grid>
+          </Grid>);
 }
 
 export function ScreenProgress(props) {

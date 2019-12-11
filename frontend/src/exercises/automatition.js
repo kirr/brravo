@@ -8,7 +8,8 @@ const gridStyles = makeStyles({
   root: {
     position: "absolute",
     top: "calc(50% - 40px)",
-    width: "100%"
+    width: "100%",
+    fontSize: "1.5em"
   }
 });
 

@@ -16,7 +16,7 @@ export function GymnasticsExercise(props) {
   }
   const content = props.params.content.html;
   return (<div>
-            {Toolbar(props.params.name, props.lastScreenCallback)}
+            {Toolbar(props.params.name, props.lastScreenCallback, props.params.duration)}
             <ScreenProgress duration={duration} screen={0}/>
             <div key="gymnastics_container" dangerouslySetInnerHTML={{ __html: content }} />
             {finishPopup}
