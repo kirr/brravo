@@ -10,11 +10,12 @@ class Exercise(db.Model):
     class Type(enum.Enum):
         Story = 1,
         Automatition = 2
+        Gymnastics = 3
 
     id = db.Column(db.String(64), primary_key=True)
     display_name = db.Column(db.String(64))
     duration = db.Column(db.Integer())
-    type = db.Column(db.Enum(Type))
+    type = db.Column(db.String(32), nullable=False)
     content = db.Column(db.Text())
 
     def serialize(self):
@@ -22,7 +23,7 @@ class Exercise(db.Model):
             'id': self.id,
             'name': self.display_name,
             'duration': self.duration,
-            'type': self.type.name.lower(),
+            'type': self.type,
             'content': json.loads(self.content)
         }
 

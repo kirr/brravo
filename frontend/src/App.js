@@ -2,7 +2,7 @@ import React from 'react';
 import {Box, BottomNavigation, BottomNavigationAction} from '@material-ui/core';
 import {MenuBook, Assignment, Info} from '@material-ui/icons';
 import {Lesson, Exercises, About} from './navigation_screens';
-import {AutomatitionExercise, StoryExercise} from './exercises';
+import {AutomatitionExercise, GymnasticsExercise, StoryExercise} from './exercises';
 
 import './App.css';
 
@@ -29,6 +29,10 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
             lastScreenCallback={lastScreenHandler}/>;
         } else if (exerciseData.type === 'story') {
           return <StoryExercise
+            params={exerciseData}
+            lastScreenCallback={lastScreenHandler}/>;
+        } else if (exerciseData.type === 'gymnastics') {
+          return <GymnasticsExercise
             params={exerciseData}
             lastScreenCallback={lastScreenHandler}/>;
         }

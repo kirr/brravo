@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Swiper from 'react-id-swiper';
 import 'swiper/css/swiper.css';
 
-import {RenderToolbar} from './helpers.js';
+import {Toolbar} from './helpers.js';
 
 const storiesStyles = makeStyles({
   continueButton: {
@@ -50,7 +50,7 @@ export function StoryExercise(props) {
   }
 
   return (<div>
-            {RenderToolbar(props.params.name, props.lastScreenCallback)}
+            {Toolbar(props.params.name, props.lastScreenCallback)}
             <Swiper {...params}>
               {screens.map((item, index)=>{
                 return (

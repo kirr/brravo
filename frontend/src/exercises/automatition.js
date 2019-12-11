@@ -1,8 +1,8 @@
 import React from 'react';
-import { Fade, Grid, Paper, LinearProgress } from '@material-ui/core';
+import { Fade, Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {RenderToolbar, FinishPopup} from './helpers.js';
+import {ScreenProgress, Toolbar, FinishPopup} from './helpers.js';
 
 const gridStyles = makeStyles({
   root: {
@@ -11,30 +11,6 @@ const gridStyles = makeStyles({
     width: "100%"
   }
 });
-
-const progressStyles = makeStyles({
-  progress: {
-    transitionDuration: props => props.duration + "s"
-  }
-});
-
-function ScreenProgress(props) {
-  const [progress, setProgress] = React.useState(0);
-  const stepDuration = props.duration / 10.0;
-  const step = 100.0 / stepDuration;
-  const classes = progressStyles({duration: progress === 0 ? 0 : props.duration});
-  React.useEffect(() => {
-    setProgress(0);
-    const timer = setInterval(()=>{ setProgress(prev => {
-      Math.min(prev + step, 100);
-    });}, 100);
-    return () => { clearInterval(timer); };
-  }, [props, step]);
-
-  return (
-    <LinearProgress classes={{bar1Determinate: classes.progress}} variant="determinate"
-                    value={progress} />);
-}
 
 export function AutomatitionExercise(props) {
   const [screen, setScreen] = React.useState(0);
@@ -49,7 +25,7 @@ export function AutomatitionExercise(props) {
   React.useEffect(() => {
     let timer = null;
     if (state === 'in') {
-      timer = setTimeout(()=>{ setFade(false); setState('out')}, desc.duration * 1000);
+      timer = setTimeout(()=>{ setFade(false); setState('out');}, desc.duration * 1000);
     } else if (state === 'out') {
       if (!finished) {
         timer = setTimeout(()=>{
@@ -72,7 +48,7 @@ export function AutomatitionExercise(props) {
   }
 
   return (<div>
-    {RenderToolbar(props.params.name, props.lastScreenCallback)}
+    {Toolbar(props.params.name, props.lastScreenCallback)}
     {screenProgress}
     <Fade in={fade}>
       <Grid container classes={{root: classes.root}} justify="center" spacing={2}>

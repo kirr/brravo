@@ -49,19 +49,42 @@ class LessonsView(BasicAuthView, ModelView):
 
 
 def content_formatter(exercise_type, content):
-    if exercise_type == 'Story':
+    if exercise_type == 'story':
         json_data = json.loads(content)
         screens = json_data['screens']
         return '\n<screen_brake/>\n'.join(screens)
+    elif exercise_type == 'gymnastics':
+        return json.loads(content)['html']
     return content
+
+
+def parse_content(form):
+    if not form.content.data:
+        return ''
+
+    if form.type.data == 'story':
+        html_str = form.content.data
+        screens = html_str.split('<screen_brake/>')
+        screens = [s.strip() for s in screens]
+        return json.dumps({'screens': screens})
+    elif form.type.data == 'gymnastics':
+        return json.dumps({'html': form.content.data})
+
+    return form.content.data
 
 
 class ExercisesView(BasicAuthView, ModelView):
     column_list = ('id', 'type', 'display_name', 'duration', 'content')
     form_columns = ('id', 'type', 'display_name', 'duration', 'content')
-    form_widget_args = {'content': {'rows': 20}}
+    form_widget_args = {
+        'content': {'rows': 20},
+    }
+    form_args = {
+        'type': {'choices': [(v.name.lower(), v.name) for v in lessons.Exercise.Type] }
+    }
+    form_overrides = { 'type': wtforms.fields.SelectField }
     column_formatters = {
-        'content': lambda v, c, m, p: content_formatter(m.type.name, m.content)
+        'content': lambda v, c, m, p: content_formatter(m.type, m.content)
     }
 
     def on_form_prefill(self, form, id):
@@ -70,12 +93,7 @@ class ExercisesView(BasicAuthView, ModelView):
         form.content.data = content_formatter(form.type.data, form.content.data)
 
     def on_model_change(self, form, exercise, is_created):
-        if form.content.data and form.type.data == 'Story':
-            html_str = form.content.data
-            screens = html_str.split('<screen_brake/>')
-            screens = [s.strip() for s in screens]
-
-            exercise.content = json.dumps({'screens': screens})
+        exercise.content = parse_content(form)
 
 
 class FileAdminAuthView(BasicAuthView, FileAdmin):
