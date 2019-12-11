@@ -47,7 +47,7 @@ export function Lesson(props) {
   const lessonData = lessons.find((item) => { return item.id === lessonId; });
   const exercises = lessonData ? lessonData.exercises.map((item, index)=> {
         return (
-          <ListItem key={index} button onClick={()=>{ props.handler(item.type, item.content); }}>
+          <ListItem key={index} button onClick={()=>{ props.handler(item); }}>
             <ListItemText primary={item.name} secondary={item.duration + " мин"} />
           </ListItem>
         );}) : null;

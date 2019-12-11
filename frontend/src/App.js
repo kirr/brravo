@@ -1,6 +1,6 @@
 import React from 'react';
-import {Box, BottomNavigation, BottomNavigationAction, IconButton} from '@material-ui/core';
-import {MenuBook, Assignment, Info, ArrowBack} from '@material-ui/icons';
+import {Box, BottomNavigation, BottomNavigationAction} from '@material-ui/core';
+import {MenuBook, Assignment, Info} from '@material-ui/icons';
 import {Lesson, Exercises, About} from './navigation_screens';
 import {AutomatitionExercise, StoryExercise} from './exercises';
 
@@ -23,14 +23,13 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
       case "about":
         return <About/>;
       case "exercise":
-        const [exerciseType, exerciseParams] = exerciseData;
-        if (exerciseType === 'automatition') {
+        if (exerciseData.type === 'automatition') {
           return <AutomatitionExercise
-            params={exerciseParams} 
+            params={exerciseData}
             lastScreenCallback={lastScreenHandler}/>;
-        } else if (exerciseType === 'story') {
+        } else if (exerciseData.type === 'story') {
           return <StoryExercise
-            params={exerciseParams} 
+            params={exerciseData}
             lastScreenCallback={lastScreenHandler}/>;
         }
         return <Box>404 Missing exercise :(</Box>;
@@ -57,16 +56,6 @@ function RenderBottomNavbar(screen, setScreenCallback) {
   }
 }
 
-function RenderBackButton(screen, prevScreen, setScreenCallback) {
-  if (screen === 'exercise') {
-    return (<IconButton onClick={()=>{setScreenCallback(prevScreen);}}>
-              <ArrowBack />
-            </IconButton>);
-  } else {
-    return null;
-  }
-}
-
 function App() {
   const [screen, setScreen] = React.useState('lesson');
   const [currentExercise, setCurrentExercise] = React.useState(null);
@@ -77,14 +66,13 @@ function App() {
   const prevScreen = prevScreenRef.current;
   const screenElement = RenderScreen(screen,
                                      currentExercise,
-                                     (exerciseType, exerciseParams)=>{
-                                       setCurrentExercise([exerciseType, exerciseParams]);
+                                     (exercise)=>{
+                                       setCurrentExercise(exercise);
                                        setScreen('exercise');
                                      },
                                      ()=>{ setScreen(prevScreen); });
   return (
     <div className="App">
-        {RenderBackButton(screen, prevScreen, setScreen)}
         {screenElement}
         {RenderBottomNavbar(screen, setScreen)}
     </div>

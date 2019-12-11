@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Swiper from 'react-id-swiper';
 import 'swiper/css/swiper.css';
 
+import {RenderToolbar} from './helpers.js';
+
 const storiesStyles = makeStyles({
   continueButton: {
     marginBottom: "20px"
@@ -37,8 +39,9 @@ export function StoryExercise(props) {
 
 
   const classes = storiesStyles();
+  const screens = props.params.content.screens;
 
-  const isLast = (props.params.screens.length - 1 === screen);
+  const isLast = (screens.length - 1 === screen);
   let finishButton = null;
   if (isLast) {
     finishButton = <Button classes={{root: classes.continueButton}} color="primary" onClick={props.lastScreenCallback}>
@@ -46,13 +49,16 @@ export function StoryExercise(props) {
     </Button>
   }
 
-  return (<Swiper {...params}>
-              {props.params.screens.map((item, index)=>{
+  return (<div>
+            {RenderToolbar(props.params.name, props.lastScreenCallback)}
+            <Swiper {...params}>
+              {screens.map((item, index)=>{
                 return (
                   <div key={index + '_container'}>
                     <div key={index} dangerouslySetInnerHTML={{__html: item}} />
                     {finishButton}
                   </div>);
               })}
-          </Swiper>);
+            </Swiper>
+          </div>);
 }

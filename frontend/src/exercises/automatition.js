@@ -2,7 +2,7 @@ import React from 'react';
 import { Fade, Grid, Paper, LinearProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import {FinishPopup} from './helpers.js';
+import {RenderToolbar, FinishPopup} from './helpers.js';
 
 const gridStyles = makeStyles({
   root: {
@@ -41,8 +41,9 @@ export function AutomatitionExercise(props) {
   const [fade, setFade] = React.useState(true);
   const [state, setState] = React.useState('in');
 
-  const desc = props.params.screens[Math.min(screen, props.params.screens.length - 1)];
-  const finished = screen >= props.params.screens.length;
+  const screens = props.params.content.screens;
+  const desc = screens[Math.min(screen, screens.length - 1)];
+  const finished = screen >= screens.length;
   const classes = gridStyles();
 
   React.useEffect(() => {
@@ -71,6 +72,7 @@ export function AutomatitionExercise(props) {
   }
 
   return (<div>
+    {RenderToolbar(props.params.name, props.lastScreenCallback)}
     {screenProgress}
     <Fade in={fade}>
       <Grid container classes={{root: classes.root}} justify="center" spacing={2}>
