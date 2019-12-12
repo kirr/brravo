@@ -1,6 +1,8 @@
 import enum
 import json
 
+from sqlalchemy.orm import backref
+
 from appfactory import db
 
 
@@ -36,8 +38,8 @@ class LessonsExercises(db.Model):
     lesson_id = db.Column(db.String(64), db.ForeignKey('lessons.id', ondelete='CASCADE'))
     position = db.Column(db.Integer())
 
-    exercise = db.relationship('Exercise', backref='exercises')
-    lesson = db.relationship('Lesson', backref='lessons')
+    exercise = db.relationship('Exercise', backref=backref('exercises', passive_deletes=True))
+    lesson = db.relationship('Lesson', backref=backref('lessons', passive_deletes=True))
 
 
 class Lesson(db.Model):
