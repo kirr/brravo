@@ -3,6 +3,7 @@ import { Fade, Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import {ScreenProgress, Toolbar, FinishPopup} from './helpers.js';
+import {AudioRecorder} from './audio.js';
 
 const gridStyles = makeStyles({
   root: {
@@ -61,5 +62,6 @@ export function AutomatitionExercise(props) {
       </Grid>
     </Fade>
     {finishPopup}
+    <AudioRecorder/>
   </div>);
 }
