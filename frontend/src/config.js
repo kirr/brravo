@@ -1,5 +1,5 @@
 const prod = {
-  API_URL: "http://test.brravo.ru/rest",
+  API_URL: "https://www.brravo.ru/rest",
 };
 
 const dev = {
