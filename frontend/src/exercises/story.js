@@ -1,16 +1,8 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 import Swiper from 'react-id-swiper';
 import 'swiper/css/swiper.css';
 
-import {Toolbar} from './helpers.js';
-
-const storiesStyles = makeStyles({
-  continueButton: {
-    marginBottom: "20px"
-  }
-});
+import {ManualScreenProgress, Toolbar, FinishButton} from './helpers.js';
 
 export function StoryExercise(props) {
   const [swiper, setSwiper] = React.useState(null);
@@ -18,11 +10,6 @@ export function StoryExercise(props) {
 
   const params = {
     getSwiper: setSwiper,
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-      dynamicBullets: true
-    }
   };
 
   React.useEffect(() => {
@@ -38,25 +25,18 @@ export function StoryExercise(props) {
   }, [swiper]);
 
 
-  const classes = storiesStyles();
   const screens = props.params.content.screens;
 
   const isLast = (screens.length - 1 === screen);
-  let finishButton = null;
-  if (isLast) {
-    finishButton = <Button classes={{root: classes.continueButton}} color="primary" onClick={props.lastScreenCallback}>
-      Продолжить урок
-    </Button>
-  }
-
   return (<div>
             {Toolbar(props.params.name, props.lastScreenCallback)}
+            <ManualScreenProgress progress={100.0 * (screen + 1) / screens.length}/>
             <Swiper {...params}>
               {screens.map((item, index)=>{
                 return (
                   <div key={index + '_container'}>
                     <div key={index} dangerouslySetInnerHTML={{__html: item}} />
-                    {finishButton}
+                    {isLast ? <FinishButton lastScreenCallback={props.lastScreenCallback} /> : null }
                   </div>);
               })}
             </Swiper>

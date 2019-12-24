@@ -21,6 +21,10 @@ const helpersStyles = makeStyles({
   },
   progress: {
     transitionDuration: props => props.duration + "s"
+  },
+  continueButton: {
+    marginBottom: "20px",
+    float: "right"
   }
 });
 
@@ -92,4 +96,19 @@ export function ScreenProgress(props) {
   return (
     <LinearProgress classes={{bar1Determinate: classes.progress}} variant="determinate"
                     value={progress} />);
+}
+
+export function ManualScreenProgress(props) {
+  const classes = helpersStyles();
+  return (
+    <LinearProgress classes={{bar1Determinate: classes.progress}} variant="determinate"
+                    value={props.progress} />);
+}
+
+export function FinishButton(props) {
+    const classes = helpersStyles();
+    return (<Button classes={{root: classes.continueButton}} color="primary" onClick={props.lastScreenCallback}>
+      Продолжить урок
+    </Button>);
+
 }

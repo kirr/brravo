@@ -1,67 +1,85 @@
 import React from 'react';
-import { Fade, Grid, Paper } from '@material-ui/core';
+import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Swiper from 'react-id-swiper';
+import 'swiper/css/swiper.css';
 
-import {ScreenProgress, Toolbar, FinishPopup} from './helpers.js';
+import {ManualScreenProgress, Toolbar, FinishButton} from './helpers.js';
 import {AudioRecorder} from './audio.js';
 
 const gridStyles = makeStyles({
   root: {
-    position: "absolute",
-    top: "calc(50% - 40px)",
-    width: "100%",
-    fontSize: "1.5em"
+    margin: "auto"
+  },
+  childContainerItem : {
+    margin: "auto"
+  },
+  childContainer : {
+    alignContent: "center",
+    minHeight: "300px"
   }
 });
 
 export function AutomatitionExercise(props) {
   const [screen, setScreen] = React.useState(0);
-  const [fade, setFade] = React.useState(true);
-  const [state, setState] = React.useState('in');
+  const [swiper, setSwiper] = React.useState(null);
 
   const screens = props.params.content.screens;
-  const desc = screens[Math.min(screen, screens.length - 1)];
-  const finished = screen >= screens.length;
   const classes = gridStyles();
 
+  const params = {
+    getSwiper: setSwiper,
+  };
+
   React.useEffect(() => {
-    let timer = null;
-    if (state === 'in') {
-      timer = setTimeout(()=>{ setFade(false); setState('out');}, desc.duration * 1000);
-    } else if (state === 'out') {
-      if (!finished) {
-        timer = setTimeout(()=>{
-          setFade(true);
-          setScreen(screen + 1);
-          setState('in');
-        }, 200);
-      }
+    if (swiper !== null) {
+      swiper.on("slideChange", () => setScreen(swiper.realIndex));
     }
 
-    return () => { clearTimeout(timer); };
-  }, [state]);
-
-  let finishPopup = null;
-  let screenProgress = null;
-  if (finished) {
-    finishPopup = <FinishPopup finishCallback={props.lastScreenCallback}/>;
-  } else {
-    screenProgress = <ScreenProgress duration={desc.duration} screen={screen}/>;
-  }
+    return () => {
+      if (swiper !== null) {
+        swiper.off("slideChange", () => setScreen(swiper.realIndex));
+      }
+    };
+  }, [swiper]);
 
   return (<div>
     {Toolbar(props.params.name, props.lastScreenCallback)}
-    {screenProgress}
-    <Fade in={fade}>
-      <Grid container classes={{root: classes.root}} justify="center" spacing={2}>
-          {desc.content.map((value, index) => (
-            <Grid key={index + value} item>
-              <Paper elevation={5}>{value}</Paper>
+    <ManualScreenProgress progress={100.0 * (screen + 1) / screens.length}/>
+    <Swiper {...params}>
+      {screens.map((item, index)=>{
+        const isLast = (screens.length - 1 === index);
+        let buttonItem = null;
+        if (isLast) {
+          buttonItem = (<Grid key="finish_button_item" item>
+              <FinishButton lastScreenCallback={props.lastScreenCallback} />
+            </Grid>);
+        }
+        return (
+          <Grid container key={"screen_container_top_" + index}
+                          direction="column"
+                          alignItems="flex-end"
+                          classes={{root: classes.root}} >
+            <Grid item classes={{root: classes.childContainerItem}} >
+              <Grid container key={"screen_container_" + index}
+                              justify="center" spacing={2}
+                              alignItems="center"
+                              classes={{root: classes.childContainer}} >
+                  {item.content.map((value, value_index) => {
+                    return (
+                    <Grid key={"word_" + index + "_" + value_index} item>
+                      <Paper elevation={5}>{value}</Paper>
+                    </Grid>);
+                  })}
+              </Grid>
             </Grid>
-          ))}
-      </Grid>
-    </Fade>
-    {finishPopup}
+            <Grid item>
+              {buttonItem}
+            </Grid>
+          </Grid>
+      );
+      })}
+    </Swiper>
     <AudioRecorder/>
   </div>);
 }
