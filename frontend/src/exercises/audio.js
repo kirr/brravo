@@ -102,7 +102,12 @@ function Player(props) {
     props.setRecordsHandler(newRecords);
     setAnchorEl(null);
   };
-  const shareRecord = ()=>{console.log("share");};
+  const shareRecord = ()=>{
+    //fetch(contextMenuRecord.url).then(r => r.blob()).then(
+      //blobData => navigator.share({blob: blobData, title: "Запись упражнения"}));
+    console.log('Share');
+    setAnchorEl(null);
+  };
 
   return (
     <div>
@@ -146,6 +151,7 @@ export function AudioRecorder(props) {
     navigator.mediaDevices.getUserMedia({ audio: true }).then(
       () => { setBlocked(false);}).catch(
       (err) => { setBlocked(true); console.log(err)});
+    return ()=>{ Mp3Recorder.stop(); }
   }, []);
 
   const [rec, setRec] = React.useState(false);
