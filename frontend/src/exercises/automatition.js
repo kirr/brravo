@@ -29,6 +29,7 @@ export function AutomatitionExercise(props) {
 
   const params = {
     getSwiper: setSwiper,
+    containerClass: 'BrravoSwiperContainer'
   };
 
   React.useEffect(() => {
@@ -43,7 +44,7 @@ export function AutomatitionExercise(props) {
     };
   }, [swiper]);
 
-  return (<div>
+  return (<div class="ExerciseScreenContainer">
     {Toolbar(props.params.name, props.lastScreenCallback)}
     <ManualScreenProgress progress={100.0 * (screen + 1) / screens.length}/>
     <Swiper {...params}>

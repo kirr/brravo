@@ -1,5 +1,8 @@
 .App {
     padding-left: 5px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .App-logo {
@@ -24,4 +27,18 @@
 .MuiPaper-root {
     padding: 5px;
     min-width: 30px;
+}
+
+html, body, #root, .App, .ScreenContainer {
+  height: 100%;
+}
+
+.ExerciseScreenContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.BrravoSwiperContainer {
+  height: 100%;
 }

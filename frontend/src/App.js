@@ -6,14 +6,6 @@ import {AutomatitionExercise, GymnasticsExercise, StoryExercise} from './exercis
 
 import './App.css';
 
-import { styled } from '@material-ui/core/styles';
-
-const AbsoluteButtomNavigation = styled(BottomNavigation)({
-  position: 'absolute',
-  bottom: 0,
-  width: '100%',
-});
-
 function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenHandler) {
     switch (screenId) {
       case "lesson":
@@ -44,7 +36,7 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
 
 function RenderBottomNavbar(screen, setScreenCallback) {
   if (screen !== 'exercise') {
-    return (<AbsoluteButtomNavigation
+    return (<BottomNavigation
               value={screen}
               onChange={(event, newValue) => {
                       setScreenCallback(newValue);
@@ -54,7 +46,7 @@ function RenderBottomNavbar(screen, setScreenCallback) {
               <BottomNavigationAction value="lesson" icon={<MenuBook />} />
               <BottomNavigationAction value="exercises"  icon={<Assignment />} />
               <BottomNavigationAction value="about" icon={<Info />} />
-            </AbsoluteButtomNavigation>);
+            </BottomNavigation>);
   } else {
     return null;
   }
@@ -77,7 +69,9 @@ function App() {
                                      ()=>{ setScreen(prevScreen); });
   return (
     <div className="App">
-        {screenElement}
+        <div class="ScreenContainer">
+          {screenElement}
+        </div>
         {RenderBottomNavbar(screen, setScreen)}
     </div>
   );

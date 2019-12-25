@@ -13,10 +13,6 @@ import {useLongTouch} from '../tools'
 const Mp3Recorder = new MicRecorder({ bitRate: 128 });
 
 const recordingStyles = makeStyles({
-  root: {
-    position: "absolute",
-    bottom: 0
-  },
   player: {
     overflowX: "auto"
   },
@@ -189,8 +185,7 @@ export function AudioRecorder(props) {
 
   const classes = recordingStyles();
   return (
-    <Grid container classes={{root: classes.root}}
-                    wrap="nowrap"
+    <Grid container wrap="nowrap"
                     direction="row" alignItems="center"
                     justify="space-between">
       <Grid item classes={{root: classes.player}} key="grid_player">
