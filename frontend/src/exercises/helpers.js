@@ -107,7 +107,8 @@ export function ManualScreenProgress(props) {
 
 export function FinishButton(props) {
     const classes = helpersStyles();
-    return (<Button classes={{root: classes.continueButton}} color="primary" onClick={props.lastScreenCallback}>
+    return (<Button classes={{root: classes.continueButton}} color="primary"
+                    onClick={props.lastScreenCallback} disabled={props.disabled} >
       Продолжить урок
     </Button>);
 

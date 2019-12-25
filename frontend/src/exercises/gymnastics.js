@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScreenProgress, Toolbar, FinishPopup} from './helpers.js';
+import {ScreenProgress, Toolbar, FinishButton} from './helpers.js';
 
 export function GymnasticsExercise(props) {
   const [finished, setFinished] = React.useState(false);
@@ -10,15 +10,11 @@ export function GymnasticsExercise(props) {
   }, [props]);
 
 
-  let finishPopup = null;
-  if (finished) {
-    finishPopup = <FinishPopup finishCallback={props.lastScreenCallback}/>;
-  }
   const content = props.params.content.html;
   return (<div>
             {Toolbar(props.params.name, props.lastScreenCallback, props.params.duration)}
             <ScreenProgress duration={duration} screen={0}/>
             <div key="gymnastics_container" dangerouslySetInnerHTML={{ __html: content }} />
-            {finishPopup}
+            <FinishButton lastScreenCallback={props.lastScreenCallback} disabled={!finished}/>
           </div>);
 }
