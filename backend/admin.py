@@ -42,7 +42,7 @@ class LessonsView(BasicAuthView, ModelView):
     inline_models = ((
         lessons.LessonsExercises,
         {
-            'form_columns': ('id', 'exercise', 'position'),
+            'form_columns': ('id', 'exercise', 'position', 'group_name'),
             'form_label': 'Exercises',
         }
     ),)

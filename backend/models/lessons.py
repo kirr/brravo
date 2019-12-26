@@ -37,9 +37,18 @@ class LessonsExercises(db.Model):
     exercise_id = db.Column(db.String(64), db.ForeignKey('exercises.id', ondelete='CASCADE'))
     lesson_id = db.Column(db.String(64), db.ForeignKey('lessons.id', ondelete='CASCADE'))
     position = db.Column(db.Integer())
+    group_name = db.Column(db.String(64))
 
-    exercise = db.relationship('Exercise', backref=backref('exercises', passive_deletes=True))
-    lesson = db.relationship('Lesson', backref=backref('lessons', passive_deletes=True))
+    exercise = db.relationship('Exercise')
+    lesson = db.relationship('Lesson', back_populates='exercises')
+
+    def serialize(self):
+        if not self.exercise:
+            return None
+        res = self.exercise.serialize()
+        res['group_name'] = self.group_name or ''
+        res['position'] = self.position or 1000
+        return res
 
 
 class Lesson(db.Model):
@@ -47,10 +56,9 @@ class Lesson(db.Model):
 
     id = db.Column(db.String(64), primary_key=True)
     display_name = db.Column(db.String(64))
-    exercises = db.relationship('Exercise', secondary="lessons_exercises",
-                                backref=db.backref('exercise', lazy='dynamic'),
+    exercises = db.relationship('LessonsExercises',
                                 order_by=LessonsExercises.__table__.c.position,
-                                viewonly=True)
+                                viewonly=True, back_populates='lesson')
 
     def serialize(self):
         return {

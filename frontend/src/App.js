@@ -69,7 +69,7 @@ function App() {
                                      ()=>{ setScreen(prevScreen); });
   return (
     <div className="App">
-        <div class="ScreenContainer">
+        <div className="ScreenContainer">
           {screenElement}
         </div>
         {RenderBottomNavbar(screen, setScreen)}
