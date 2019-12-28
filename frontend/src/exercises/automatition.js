@@ -44,7 +44,7 @@ export function AutomatitionExercise(props) {
     };
   }, [swiper]);
 
-  return (<div class="ExerciseScreenContainer">
+  return (<div className="ExerciseScreenContainer">
     {Toolbar(props.params.name, props.lastScreenCallback)}
     <ManualScreenProgress progress={100.0 * (screen + 1) / screens.length}/>
     <Swiper {...params}>

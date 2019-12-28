@@ -49,7 +49,7 @@ class LessonsView(BasicAuthView, ModelView):
 
 
 def content_formatter(exercise_type, content):
-    if exercise_type == 'story':
+    if exercise_type in ('story', 'reading'):
         json_data = json.loads(content)
         screens = json_data['screens']
         return '\n<screen_brake/>\n'.join(screens)
@@ -62,7 +62,7 @@ def parse_content(form):
     if not form.content.data:
         return ''
 
-    if form.type.data == 'story':
+    if form.type.data in ('story', 'reading'):
         html_str = form.content.data
         screens = html_str.split('<screen_brake/>')
         screens = [s.strip() for s in screens]

@@ -27,6 +27,11 @@ function RenderScreen(screenId, exerciseData, exerciseChooseHandler, lastScreenH
           return <GymnasticsExercise
             params={exerciseData}
             lastScreenCallback={lastScreenHandler}/>;
+        } else if (exerciseData.type === 'reading') {
+          return <StoryExercise
+            params={exerciseData}
+            lastScreenCallback={lastScreenHandler}
+            hasAudioRecording={true} />;
         }
         return <Box>404 Missing exercise :(</Box>;
       default:

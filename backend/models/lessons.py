@@ -13,6 +13,7 @@ class Exercise(db.Model):
         Story = 1,
         Automatition = 2
         Gymnastics = 3
+        Reading = 4
 
     id = db.Column(db.String(64), primary_key=True)
     display_name = db.Column(db.String(64))

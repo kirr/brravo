@@ -3,6 +3,7 @@ import Swiper from 'react-id-swiper';
 import 'swiper/css/swiper.css';
 
 import {ManualScreenProgress, Toolbar, FinishButton} from './helpers.js';
+import {AudioRecorder} from './audio.js';
 
 export function StoryExercise(props) {
   const [swiper, setSwiper] = React.useState(null);
@@ -10,6 +11,7 @@ export function StoryExercise(props) {
 
   const params = {
     getSwiper: setSwiper,
+    containerClass: 'BrravoSwiperContainer'
   };
 
   React.useEffect(() => {
@@ -28,7 +30,7 @@ export function StoryExercise(props) {
   const screens = props.params.content.screens;
 
   const isLast = (screens.length - 1 === screen);
-  return (<div>
+  return (<div className="ExerciseScreenContainer">
             {Toolbar(props.params.name, props.lastScreenCallback)}
             <ManualScreenProgress progress={100.0 * (screen + 1) / screens.length}/>
             <Swiper {...params}>
@@ -40,5 +42,6 @@ export function StoryExercise(props) {
                   </div>);
               })}
             </Swiper>
+            {props.hasAudioRecording ? <AudioRecorder/> : null }
           </div>);
 }
